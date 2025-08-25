@@ -2,18 +2,25 @@ import sqlite3
 
 conn = sqlite3.connect('inventory.db')
 
-if conn:
-    pass
-else:
-    cursor = conn.cursor()
+cursor = conn.cursor()
 
-    cursor.execute("""CREATE TABLE IF NOT EXISTS products (
-                id INTEGER,
-                name TEXT,
-                stock INTEGER,
-                price REAL
-                )""")
+#cursor.execute("""CREATE TABLE IF NOT EXISTS products (
+ #           id INTEGER PRIMARY KEY,
+ #           name TEXT,
+ #           stock INTEGER,
+ #           price REAL
+ #       )""")
+    
+cursor.execute("INSERT INTO products VALUES (5, 'Keychain', 50, 6.99)")
 
-    conn.commit()
+conn.commit()
 
-    conn.close()
+cursor.execute("SELECT * FROM products WHERE id>=1")
+
+print(cursor.fetchall())    
+
+conn.commit()
+
+conn.close()
+
+
