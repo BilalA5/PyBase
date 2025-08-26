@@ -1,10 +1,13 @@
 import sqlite3
 from inventory import Inventory
 
-conn = sqlite3.connect('inventory_stock.db')
+#Establish a connection to the database
+conn = sqlite3.connect('inventory_stock.db') 
 
+#Create our cursor for executing SQL commands
 cursor = conn.cursor()
 
+#Create our products table that tracks the warehouse
 cursor.execute("""CREATE TABLE IF NOT EXISTS products (
             id INTEGER PRIMARY KEY,
             name TEXT,
@@ -21,11 +24,11 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS products (
 conn.commit()
 
 #Prefilled Data with Inventory class
-item_1 = Inventory(1, "T-Shirt", 100, 19.99, "XSupply", "District 1", 5.1, "10x10x10cm", 
+item_1 = Inventory(1, "T-Shirt", 100, 19.99, "XSupply", "Warehouse 1", 5.1, "10x10x10cm", 
 "SN123456", 10.00)
-item_2 = Inventory(2, "Sweater", 50, 39.99, "XSupply", "District 2", 8.3, "15x15x15cm",
+item_2 = Inventory(2, "Sweater", 50, 39.99, "XSupply", "Warehouse 2", 8.3, "15x15x15cm",
 "SN654321", 20.00)
-item_3 = Inventory(3, "Jeans", 75, 49.99, "YSupply", "District 1", 12.5, "15x20x20cm",
+item_3 = Inventory(3, "Jeans", 75, 49.99, "YSupply", "Warehouse 1", 12.5, "15x20x20cm",
 "SN789012", 25.00)
 
 
