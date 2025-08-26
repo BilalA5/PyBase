@@ -1,6 +1,6 @@
 class Inventory:
 
-    def __init__(self, id, name, stock, price, supplier, location, weight, dimensions, 
+    def __init__(self, id, name, stock, price, supplier, location, weight, box_dimensions, 
         serial_number, manufacture_price):
          
          self.id = id
@@ -10,7 +10,7 @@ class Inventory:
          self.supplier = supplier
          self.location = location
          self.weight = weight
-         self.dimensions = dimensions
+         self.box_dimensions = box_dimensions
          self.serial_number = serial_number
          self.manufacture_price = manufacture_price
 
