@@ -1,8 +1,10 @@
 import sqlite3
 from inventory import Inventory
+import tkinter as tk
 
 #Establish a connection to the database
-conn = sqlite3.connect('inventory_stock.db') 
+database = 'inventory_stock.db'
+conn = sqlite3.connect(database) 
 
 #Create our cursor for executing SQL commands
 cursor = conn.cursor()
