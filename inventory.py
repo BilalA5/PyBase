@@ -1,24 +1,21 @@
 class Inventory:
 
-    def __init__(self, id, name, stock, price, sku, category, supplier, location, weight, dimensions, 
-        reorder_level, serial_number, cost_price):
+    def __init__(self, id, name, stock, price, supplier, location, weight, dimensions, 
+        serial_number, manufacture_price):
          
          self.id = id
          self.name = name
          self.stock = stock
          self.price = price
-         self.sku = sku
-         self.category = category
          self.supplier = supplier
          self.location = location
          self.weight = weight
          self.dimensions = dimensions
-         self.reorder_level = reorder_level
          self.serial_number = serial_number
-         self.cost_price = cost_price
+         self.manufacture_price = manufacture_price
 
     #Utility Methods
-    def update_stock(self, new_stock);
+    def update_stock(self, new_stock):
         self.stock = new_stock
 
     def update_price(self, new_price):
@@ -26,6 +23,10 @@ class Inventory:
 
     def profit_margin(self, cost_price):
         return ((self.price - cost_price) / self.price) * 100
+    
+    def make_sku(self):
+        return f"{self.name[:3].upper()}-{self.id}-{self.serial_number[-4:]}"
          
-
+    def __repr__(self):
+        return f"Inventory({self.id}, {self.name}, {self.stock}, {self.price}, {self.supplier}, {self.location}, {self.weight}, {self.dimensions}, {self.serial_number}, {self.manufacture_price})"
 
