@@ -16,8 +16,8 @@ cursor.execute("""CREATE TABLE IF NOT EXISTS products (
             weight TEXT,
             dimensions TEXT,
             reorder_level INTEGER,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            serial_number TEXT UNIQUE,
+            cost_price REAL
        )""")
     
 cursor.execute("INSERT INTO products VALUES (5, 'Keychain', 50, 6.99)")
