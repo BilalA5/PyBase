@@ -1,6 +1,6 @@
 from inventory import Inventory
 from operations import DatabaseManager
-import tkinter as tk
+import ttkbootstrap as tb
 from gui import InventoryGUI
 
 #Initalize Database Manager
@@ -19,7 +19,7 @@ dbm.add_item(item_2)
 dbm.add_item(item_3)
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = tb.Window(themename="darkly")  # Modern dark theme
     app = InventoryGUI(root)
     root.mainloop()
 
