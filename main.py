@@ -1,6 +1,7 @@
 from inventory import Inventory
 from operations import DatabaseManager
 import tkinter as tk
+from gui import InventoryGUI
 
 #Initalize Database Manager
 database = "inventory_stock.db"
@@ -16,6 +17,11 @@ item_3 = Inventory(3, "Jeans", 75, 29.99, "Levi's", "Warehouse 2", 10.0, "30x20x
 dbm.add_item(item_1)
 dbm.add_item(item_2)
 dbm.add_item(item_3)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = InventoryGUI(root)
+    root.mainloop()
 
 
 

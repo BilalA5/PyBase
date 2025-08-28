@@ -83,7 +83,7 @@ class InventoryGUI:
                 product.box_dimensions, product.serial_number, product.manufacture_price
             ))
     
-     def add_product(self):
+    def add_product(self):
         """Add a new product"""
         try:
             item = Inventory(
