@@ -82,3 +82,57 @@ class InventoryGUI:
                 product.supplier, product.location, product.weight,
                 product.box_dimensions, product.serial_number, product.manufacture_price
             ))
+    
+     def add_product(self):
+        """Add a new product"""
+        try:
+            item = Inventory(
+                int(self.entries["ID"].get()),
+                self.entries["Name"].get(),
+                int(self.entries["Stock"].get()),
+                float(self.entries["Price"].get()),
+                self.entries["Supplier"].get(),
+                self.entries["Location"].get(),
+                float(self.entries["Weight"].get()),
+                self.entries["Box Dimensions"].get(),
+                self.entries["Serial Number"].get(),
+                float(self.entries["Manufacture Price"].get())
+            )
+            self.db.add_item(item)
+            self.load_products()
+            messagebox.showinfo("Success", "Product added successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to add product: {e}")
+
+    def update_stock(self):
+        """Update stock for a product"""
+        try:
+            item_id = int(self.entries["ID"].get())
+            new_stock = int(self.entries["Stock"].get())
+            self.db.update_stock(item_id, new_stock)
+            self.load_products()
+            messagebox.showinfo("Success", "Stock updated successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to update stock: {e}")
+
+    def delete_product(self):
+        """Delete a product"""
+        try:
+            item_id = int(self.entries["ID"].get())
+            self.db.delete_item(item_id)
+            self.load_products()
+            messagebox.showinfo("Deleted", "Product deleted successfully!")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to delete product: {e}")
+
+    def search_product(self):
+        """Search product by serial number"""
+        try:
+            serial_number = self.entries["Serial Number"].get()
+            product = self.db.get_item_by_serial(serial_number)
+            if product:
+                messagebox.showinfo("Product Found", f"Name: {product.name}\nStock: {product.stock}\nPrice: {product.price}")
+            else:
+                messagebox.showinfo("Not Found", "No product found with this serial number")
+        except Exception as e:
+            messagebox.showerror("Error", f"Search failed: {e}")
