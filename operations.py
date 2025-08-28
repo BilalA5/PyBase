@@ -2,7 +2,7 @@ import sqlite3
 from inventory import Inventory
 
 class DatabaseManager:
-    def __init__(self, database):
+    def __init__(self, database='inventory_stock.db'):
         self.conn = sqlite3.connect(database)
         self.cursor = self.conn.cursor()
         self.create_table()
