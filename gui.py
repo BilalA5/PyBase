@@ -7,58 +7,83 @@ class InventoryGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Inventory Management System")
-        self.root.geometry("1000x600")
-        self.root.resizable(False, False)
-
-        # Database Manager
         self.db = DatabaseManager()
 
-        # UI Components
+        style = ttk.Style()
+        style.theme_use("clam")  # Switches to a cross-platform theme
+        style.configure("TButton", padding=6, relief="flat", background="#4CAF50", foreground="white")
+        style.map("TButton",
+                  foreground=[("active", "white")],
+                  background=[("active", "#45a049")])
+
+
+        # Create widgets first
         self.create_widgets()
+
+        # Now load products after product_table exists
         self.load_products()
 
+
     def create_widgets(self):
-        # ====== TITLE ======
-        title = tk.Label(
-            self.root,
-            text="Inventory Management System",
-            font=("Helvetica", 18, "bold"),
-            bg="#2C3E50",
-            fg="white",
-            pady=10
-        )
-        title.pack(fill=tk.X)
+        # ===== PRODUCT TABLE =====
+        table_frame = tk.Frame(self.root)
+        table_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-        # ====== TABLE FRAME ======
-        table_frame = tk.Frame(self.root, padx=10, pady=10)
-        table_frame.pack(fill=tk.BOTH, expand=True)
-
-        # Product Table
-        columns = ("ID", "Name", "Stock", "Price", "Supplier", "Location", "Weight", "Box Dimensions", "Serial Number", "Manufacture Price")
-        self.product_table = ttk.Treeview(table_frame, columns=columns, show="headings", height=15)
+        columns = ("ID", "Name", "Stock", "Price", "Supplier", "Location", "Weight", "Dimensions", "Serial", "Manufacture Price")
+        self.product_table = ttk.Treeview(table_frame, columns=columns, show="headings")
 
         for col in columns:
             self.product_table.heading(col, text=col)
-            self.product_table.column(col, width=120, anchor="center")
+            self.product_table.column(col, width=120)
 
-        self.product_table.pack(side=tk.LEFT, fill=tk.BOTH)
+        # Add vertical + horizontal scrollbars
+        y_scroll = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=self.product_table.yview)
+        x_scroll = ttk.Scrollbar(table_frame, orient=tk.HORIZONTAL, command=self.product_table.xview)
 
-        # Scrollbar
-        scrollbar = ttk.Scrollbar(table_frame, orient=tk.VERTICAL, command=self.product_table.yview)
-        self.product_table.configure(yscroll=scrollbar.set)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.product_table.configure(yscrollcommand=y_scroll.set, xscrollcommand=x_scroll.set)
+        self.product_table.grid(row=0, column=0, sticky="nsew")
+        y_scroll.grid(row=0, column=1, sticky="ns")
+        x_scroll.grid(row=1, column=0, sticky="ew")
 
-    # ====== FORM FRAME ======
-        form_frame = tk.Frame(self.root, pady=10)
-        form_frame.pack(fill=tk.X)
+        table_frame.grid_rowconfigure(0, weight=1)
+        table_frame.grid_columnconfigure(0, weight=1)
 
-        labels = ["ID", "Name", "Stock", "Price", "Supplier", "Location", "Weight", "Box Dimensions", "Serial Number", "Manufacture Price"]
+
+        # ====== SCROLLABLE FORM FRAME ======
+        form_container = tk.Frame(self.root)
+        form_container.pack(fill=tk.X, padx=10, pady=10)
+
+        # Canvas to enable scrolling
+        form_canvas = tk.Canvas(form_container, height=120)
+        form_canvas.pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+        # Horizontal Scrollbar
+        scrollbar_x = ttk.Scrollbar(form_container, orient=tk.HORIZONTAL, command=form_canvas.xview)
+        scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
+
+        # Configure canvas scrolling
+        form_canvas.configure(xscrollcommand=scrollbar_x.set)
+        form_canvas.bind('<Configure>', lambda e: form_canvas.configure(scrollregion=form_canvas.bbox("all")))
+
+        # Frame inside canvas to hold the form
+        form_frame = tk.Frame(form_canvas)
+        form_canvas.create_window((0, 0), window=form_frame, anchor="nw")
+
+        # ====== FORM FIELDS ======
+        labels = [
+            "ID", "Name", "Stock", "Price", "Supplier",
+            "Location", "Weight", "Box Dimensions",
+            "Serial Number", "Manufacture Price"
+        ]
         self.entries = {}
 
         for idx, label in enumerate(labels):
-            tk.Label(form_frame, text=label).grid(row=idx // 5, column=(idx % 5) * 2, padx=5, pady=5)
-            entry = tk.Entry(form_frame, width=15)
-            entry.grid(row=idx // 5, column=(idx % 5) * 2 + 1, padx=5, pady=5)
+            # Arrange all inputs in a **single horizontal row**
+            tk.Label(form_frame, text=label).grid(row=0, column=idx * 2, padx=5, pady=5, sticky="w")
+
+            entry_width = 20 if label == "Manufacture Price" else 18
+            entry = tk.Entry(form_frame, width=entry_width)
+            entry.grid(row=0, column=idx * 2 + 1, padx=5, pady=5)
             self.entries[label] = entry
 
         # ====== BUTTONS ======
